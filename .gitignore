@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+/artifacts/
+.env
+.env.*
+!.env.example
+*.log
+*.tsbuildinfo
+*.pem
+*.pfx
+*.sea.blob
+.DS_Store
+Thumbs.db

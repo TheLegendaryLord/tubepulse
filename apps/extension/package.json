@@ -1,0 +1,13 @@
+{
+  "name": "@tubepulse/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build && vite build --config vite.content.config.ts"
+  },
+  "dependencies": {
+    "@tubepulse/shared": "0.1.0",
+    "zod": "^4.0.0"
+  }
+}

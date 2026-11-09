@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TubePulse</title>
+  </head>
+  <body>
+    <main class="panel">
+      <header class="masthead">
+        <div class="brand">
+          <img src="./icons/pulse-48.png" alt="" width="36" height="36" />
+          <div>
+            <h1>TubePulse</h1>
+            <span class="brand-caption">YouTube presence for Discord</span>
+          </div>
+        </div>
+        <label class="master switch-row" title="Enable TubePulse">
+          <input type="checkbox" id="enabled" role="switch" aria-label="Enable TubePulse" disabled />
+          <span class="switch" aria-hidden="true"></span>
+        </label>
+      </header>
+
+      <section class="hero" aria-labelledby="activity-heading">
+        <div class="hero-top">
+          <h2 id="activity-heading">Activity preview</h2>
+          <span id="state-chip" class="chip" data-tone="neutral">Idle</span>
+        </div>
+        <p id="activity-title" class="activity-title">Waiting for playback</p>
+        <p id="activity-channel" class="activity-subtitle">Play a video on YouTube to begin.</p>
+        <div id="preview-progress" class="preview-progress" hidden>
+          <progress id="progress-bar" max="1" value="0" aria-label="Playback progress"></progress>
+          <div class="time"><span id="time-elapsed"></span><span id="time-total"></span></div>
+        </div>
+      </section>
+
+      <ul class="connections" aria-label="Connection status">
+        <li><span>YouTube</span><strong id="youtube" data-tone="neutral">Waiting</strong></li>
+        <li><span>Companion</span><strong id="companion" data-tone="neutral">Checking</strong></li>
+        <li><span>Discord</span><strong id="discord" data-tone="neutral">Waiting</strong></li>
+      </ul>
+      <p id="connection-detail" class="detail" role="status" hidden></p>
+
+      <section class="privacy" aria-labelledby="privacy-label">
+        <div>
+          <h2 id="privacy-label">Privacy mode</h2>
+          <p>Share only a generic activity.</p>
+        </div>
+        <label class="switch-row">
+          <input type="checkbox" id="privacy" role="switch" aria-labelledby="privacy-label" disabled />
+          <span class="switch" aria-hidden="true"></span>
+        </label>
+      </section>
+
+      <fieldset id="activity-settings" disabled>
+        <legend>Activity details</legend>
+        <label class="setting"><span>Video title</span><input type="checkbox" id="showTitle" /></label>
+        <label class="setting"
+          ><span>Channel or artist</span><input type="checkbox" id="showChannel"
+        /></label>
+        <label class="setting"><span>Thumbnail</span><input type="checkbox" id="showThumbnail" /></label>
+        <label class="setting"
+          ><span>Playback progress</span><input type="checkbox" id="showProgress"
+        /></label>
+        <label class="setting"
+          ><span>Watch on YouTube button</span><input type="checkbox" id="showLink"
+        /></label>
+        <p class="footnote">Links and thumbnails can reveal the video even if you hide its title.</p>
+      </fieldset>
+
+      <fieldset id="playback-settings" disabled>
+        <legend>Playback</legend>
+        <label class="setting"
+          ><span>YouTube Shorts</span><input type="checkbox" id="trackShorts"
+        /></label>
+        <label class="setting"
+          ><span>YouTube Music</span><input type="checkbox" id="trackMusic"
+        /></label>
+        <label class="setting"
+          ><span>Show while paused</span><input type="checkbox" id="showPaused"
+        /></label>
+        <label class="setting timeout"
+          ><span>Clear after a pause of</span>
+          <select id="pauseTimeoutMinutes">
+            <option value="1">1 min</option>
+            <option value="2">2 min</option>
+            <option value="5">5 min</option>
+            <option value="10">10 min</option>
+            <option value="15">15 min</option>
+            <option value="30">30 min</option>
+            <option value="60">60 min</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <details class="setup">
+        <summary>Windows setup</summary>
+        <p>Use this extension ID when running the Windows installer.</p>
+        <input
+          type="text"
+          id="extension-id"
+          aria-label="Chrome extension ID"
+          readonly
+          spellcheck="false"
+        />
+        <div class="setup-actions">
+          <button type="button" id="copy-id">Copy ID</button>
+          <button type="button" id="retry">Check connection</button>
+        </div>
+        <p id="setup-note" role="status"></p>
+      </details>
+      <p id="settings-error" class="detail" role="alert" hidden></p>
+      <footer>Local settings <span aria-hidden="true">·</span> <span id="version"></span></footer>
+    </main>
+    <script type="module" src="/src/popup.ts"></script>
+  </body>
+</html>
