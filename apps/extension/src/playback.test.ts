@@ -172,6 +172,7 @@ describe('content message authorization', () => {
 });
 
 describe('tab playback selection', () => {
+  const enabledSettings = { ...DEFAULT_SETTINGS, enabled: true };
   const started = updateTabPlayback(undefined, playback, 'doc-a', now);
   const second = updateTabPlayback(undefined, { ...playback, videoId: nextId }, 'doc-b', now + 1_000);
   const paused = updateTabPlayback(started, { ...playback, state: 'paused' }, 'doc-a', now + 2_000);
@@ -184,7 +185,7 @@ describe('tab playback selection', () => {
           [2, second],
         ]),
         1,
-        DEFAULT_SETTINGS,
+        enabledSettings,
         now + 3_000,
       )?.tabId,
     ).toBe(2);
@@ -195,7 +196,7 @@ describe('tab playback selection', () => {
           [2, second],
         ]),
         1,
-        DEFAULT_SETTINGS,
+        enabledSettings,
         now + 3_000,
       )?.tabId,
     ).toBe(1);
@@ -206,7 +207,7 @@ describe('tab playback selection', () => {
           [2, second],
         ]),
         3,
-        DEFAULT_SETTINGS,
+        enabledSettings,
         now + 3_000,
       )?.tabId,
     ).toBe(2);
@@ -221,7 +222,7 @@ describe('tab playback selection', () => {
           [2, second],
         ]),
         undefined,
-        DEFAULT_SETTINGS,
+        enabledSettings,
         now + 7_000,
       )?.tabId,
     ).toBe(2);
@@ -238,7 +239,7 @@ describe('tab playback selection', () => {
           [2, second],
         ]),
         undefined,
-        DEFAULT_SETTINGS,
+        enabledSettings,
         now + 9_000,
       )?.tabId,
     ).toBe(1);
@@ -248,7 +249,7 @@ describe('tab playback selection', () => {
     const later = now + 60_000;
     const stillPaused = updateTabPlayback(paused, paused.playback, paused.documentId, later);
     const tabs = new Map([[1, stillPaused]]);
-    const settings = { ...DEFAULT_SETTINGS, pauseTimeoutMinutes: 1 };
+    const settings = { ...enabledSettings, pauseTimeoutMinutes: 1 };
     expect(selectPlayback(tabs, 1, settings, later + 1_999)?.tabId).toBe(1);
     expect(selectPlayback(tabs, 1, settings, later + 2_000)).toBeUndefined();
     expect(selectPlayback(tabs, 1, { ...settings, showPaused: false }, later)).toBeUndefined();
@@ -264,10 +265,10 @@ describe('tab playback selection', () => {
       [2, music],
       [3, shorts],
     ]);
-    expect(selectPlayback(tabs, 2, DEFAULT_SETTINGS, now)?.tabId).toBe(3);
-    expect(selectPlayback(tabs, 2, { ...DEFAULT_SETTINGS, trackMusic: true }, now)?.tabId).toBe(2);
-    expect(selectPlayback(tabs, 3, { ...DEFAULT_SETTINGS, trackShorts: false }, now)).toBeUndefined();
-    expect(selectPlayback(tabs, 3, { ...DEFAULT_SETTINGS, enabled: false }, now)).toBeUndefined();
+    expect(selectPlayback(tabs, 2, enabledSettings, now)?.tabId).toBe(3);
+    expect(selectPlayback(tabs, 2, { ...enabledSettings, trackMusic: true }, now)?.tabId).toBe(2);
+    expect(selectPlayback(tabs, 3, { ...enabledSettings, trackShorts: false }, now)).toBeUndefined();
+    expect(selectPlayback(tabs, 3, normalizeSettings(undefined), now)).toBeUndefined();
   });
 });
 

@@ -4,7 +4,7 @@ Use Windows 10 or 11 x64, Google Chrome and Discord Desktop. The ZIP includes th
 
 ## Install
 
-1. Download the Windows x64 ZIP and extract all files to a folder. To check the archive, run `Get-FileHash .\TubePulse-0.1.0-windows-x64.zip -Algorithm SHA256` and compare the hash with the accompanying `.sha256` file.
+1. Download the Windows x64 ZIP and extract all files to a folder. To check the archive, run `Get-FileHash .\TubePulse-0.1.1-windows-x64.zip -Algorithm SHA256` and compare the hash with the accompanying `.sha256` file.
 2. In the [Discord Developer Portal](https://discord.com/developers/applications), create a new application named **TubePulse**. Copy its **Application ID** from **General Information**. This ID is public. TubePulse uses only that ID.
 3. Open PowerShell in the extracted folder. Run the following command and paste the Application ID at the prompt.
 
@@ -13,7 +13,7 @@ Use Windows 10 or 11 x64, Google Chrome and Discord Desktop. The ZIP includes th
    ```
 
 4. When the script asks for the extension ID, leave it running. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked**, and select `%LOCALAPPDATA%\TubePulse\extension`. Copy the ID on the TubePulse card into PowerShell. Use the extension folder printed by the script if the folder picker does not expand `%LOCALAPPDATA%`.
-5. Reload the TubePulse card after setup registers the companion, then pin TubePulse using Chrome's Extensions menu. Open a YouTube video and check the status in the popup.
+5. Reload the TubePulse card after setup registers the companion, then pin TubePulse using Chrome's Extensions menu. Open the popup, choose what to share and turn TubePulse on. Play a YouTube video and check the connection status.
 6. In Discord Desktop, turn on activity sharing under **User Settings → Activity Privacy**. Check the activity on your Discord profile.
 
 `-ExecutionPolicy Bypass` applies to that PowerShell process. Setup installs to the current user's local app data and registers exactly the extension origin you entered in the current user's Chrome Native Messaging registry key.

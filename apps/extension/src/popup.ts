@@ -64,7 +64,7 @@ function renderClock(): void {
 
 function render(): void {
   const { activity, published } = current;
-  const enabled = !settingsLoaded || settings.enabled;
+  const enabled = settings.enabled;
   const privateView = settings.privacy;
   const playing = activity?.state === 'playing';
   const status = !enabled ? 'Off' : playing ? 'Playing' : activity ? 'Paused' : 'Idle';
@@ -122,7 +122,7 @@ function render(): void {
     title.textContent = enabled ? 'Waiting for playback' : 'TubePulse is off';
     subtitle.textContent = enabled
       ? 'Play a video on YouTube to begin.'
-      : 'Turn it on to share playback.';
+      : 'Choose what to share below. When you turn TubePulse on, Discord may show those playback details to others.';
   } else if (privateView) {
     title.textContent = 'Watching YouTube';
     subtitle.textContent = 'Privacy mode is on.';
@@ -153,11 +153,11 @@ function renderSettings(): void {
     } else {
       const control = element<HTMLInputElement>(key);
       control.checked = settings[key];
-      control.disabled = key !== 'enabled' && !settings.enabled;
+      control.disabled = false;
     }
   }
-  element<HTMLFieldSetElement>('activity-settings').disabled = !settings.enabled || settings.privacy;
-  element<HTMLFieldSetElement>('playback-settings').disabled = !settings.enabled;
+  element<HTMLFieldSetElement>('activity-settings').disabled = settings.privacy;
+  element<HTMLFieldSetElement>('playback-settings').disabled = false;
   retry.disabled = !settings.enabled;
   render();
 }

@@ -1,7 +1,7 @@
 export const SETTINGS_KEY = 'settings';
 
 export const DEFAULT_SETTINGS = {
-  enabled: true,
+  enabled: false,
   privacy: false,
   showTitle: true,
   showChannel: true,

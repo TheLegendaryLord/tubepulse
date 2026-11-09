@@ -3,7 +3,7 @@
   "minimum_chrome_version": "120",
   "name": "TubePulse",
   "description": "Share your YouTube playback with Discord, on your terms.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "permissions": ["storage", "nativeMessaging"],
   "icons": {
     "16": "icons/pulse-16.png",
@@ -13,7 +13,12 @@
   },
   "action": {
     "default_title": "TubePulse",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/pulse-16.png",
+      "32": "icons/pulse-32.png",
+      "48": "icons/pulse-48.png"
+    }
   },
   "background": {
     "service_worker": "background.js",

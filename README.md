@@ -1,4 +1,4 @@
-# TubePulse
+# <img src="assets/tubepulse-logo.svg" alt="TubePulse" width="440" />
 
 TubePulse shows the YouTube video you are watching as a Rich Presence activity in Discord Desktop. A Chrome extension reads the player and a Windows companion sends your selected details to Discord over a local named pipe. TubePulse is free and MIT-licensed.
 
@@ -15,9 +15,11 @@ You need Windows 10 or 11 (x64), an up-to-date Google Chrome, and the signed-in 
    ```
 
 4. While setup waits for the Chrome extension ID, open `chrome://extensions` in Chrome, enable **Developer mode**, and choose **Load unpacked**. Select `%LOCALAPPDATA%\TubePulse\extension`. Copy the ID shown on the TubePulse card back into PowerShell.
-5. In Discord Desktop, open **User Settings → Activity Privacy** and enable activity sharing. Open or reload a YouTube video and play it. Open the TubePulse popup to check YouTube, companion and Discord connection status. A second account can verify which details and buttons are visible to others. [Discord activity sharing settings](https://support.discord.com/hc/en-us/articles/7931156448919-Activity-Sharing-on-Discord-FAQ)
+5. Open the TubePulse popup, choose the details you want to share, and turn TubePulse on. In Discord Desktop, enable activity sharing, then play a YouTube video and check the connection status in the popup. [Discord activity sharing settings](https://support.discord.com/hc/en-us/articles/7931156448919-Activity-Sharing-on-Discord-FAQ)
 
 The companion starts automatically on demand from Chrome. The ZIP includes the Windows runtime. Node.js and npm are only required to build from source. The optional `-LaunchChromeAtSignIn` installer switch opens Chrome at Windows sign-in. See the [Windows guide](docs/windows.md) for exact options, updates and checksum verification.
+
+The project also builds a ZIP containing just the Chrome extension. See the [Chrome Web Store guide](docs/chrome-web-store.md) for packaging and companion enrollment. [Privacy policy](docs/privacy.md) · [Terms](docs/terms.md)
 
 ## What Discord can show
 
