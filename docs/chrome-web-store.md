@@ -33,7 +33,7 @@ Once the Store assigns the extension an ID, use that ID for the Windows companio
 
 1. Install the TubePulse extension from the Chrome Web Store.
 2. Download and extract the [Windows companion ZIP](https://github.com/TheLegendaryLord/tubepulse/releases) and open PowerShell in the extracted folder.
-3. Substitute the Store extension's 32-character ID in the following command. Setup prompts for the Discord Application ID on a fresh installation.
+3. Substitute the Store extension's 32-character ID in the following command. On a fresh installation, setup uses the public TubePulse Discord application by default.
 
    ```powershell
    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -ExtensionId '<extension-id>'

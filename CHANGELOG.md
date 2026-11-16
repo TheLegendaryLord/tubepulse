@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 preview
+
+- Use the new TubePulse monogram in the Chrome toolbar, popup and project artwork.
+- Add double-click Windows setup and use the public TubePulse Discord application by default.
+- Add a Windows Lite download that uses an existing Node.js installation.
+
 ## 0.1.1 preview
 
 - Add the TubePulse logo to the project and Chrome extension.

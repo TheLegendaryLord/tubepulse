@@ -1,4 +1,4 @@
-# <img src="assets/tubepulse-logo.svg" alt="TubePulse" width="440" />
+![TubePulse — YouTube playback on Discord](assets/readme-banner.svg)
 
 TubePulse shows the YouTube video you are watching as a Rich Presence activity in Discord Desktop. A Chrome extension reads the player and a Windows companion sends your selected details to Discord over a local named pipe. TubePulse is free and MIT-licensed.
 
@@ -6,18 +6,13 @@ TubePulse shows the YouTube video you are watching as a Rich Presence activity i
 
 You need Windows 10 or 11 (x64), an up-to-date Google Chrome, and the signed-in Discord Desktop app.
 
-1. Download the Windows ZIP and its `.sha256` from a [validated release](https://github.com/TheLegendaryLord/tubepulse/releases), if available. You can also [build a ZIP from source](#build-from-source). Extract the ZIP to a folder and keep it for the uninstaller.
-2. In the [Discord Developer Portal](https://discord.com/developers/applications), create an application named **TubePulse**. Copy its **Application ID** from **General Information**. The name you choose is the application name Discord can display.
-3. Open PowerShell in the extracted folder and run the installer. It installs for your Windows account and prompts for the Application ID and the Chrome extension ID.
+1. [Download TubePulse for Windows x64](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.2/TubePulse-0.1.2-windows-x64.zip), extract the ZIP and double-click **Install.cmd**.
+2. In `chrome://extensions`, enable **Developer mode** and click **Load unpacked**. Choose the extension folder shown by setup and paste the ID from the TubePulse card back into setup.
+3. After setup finishes, reload the extension on `chrome://extensions`. Open the TubePulse popup, choose what you want to share and turn TubePulse on. In Discord Desktop, enable activity sharing and play a YouTube video. [Discord activity sharing settings](https://support.discord.com/hc/en-us/articles/7931156448919-Activity-Sharing-on-Discord-FAQ)
 
-   ```powershell
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1
-   ```
+The standard ZIP includes the runtime. If you already have Node.js 22.13+ or 24 LTS, download the [smaller Windows Lite ZIP](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.2/TubePulse-0.1.2-windows-lite.zip) and follow the same steps.
 
-4. While setup waits for the Chrome extension ID, open `chrome://extensions` in Chrome, enable **Developer mode**, and choose **Load unpacked**. Select `%LOCALAPPDATA%\TubePulse\extension`. Copy the ID shown on the TubePulse card back into PowerShell.
-5. Open the TubePulse popup, choose the details you want to share, and turn TubePulse on. In Discord Desktop, enable activity sharing, then play a YouTube video and check the connection status in the popup. [Discord activity sharing settings](https://support.discord.com/hc/en-us/articles/7931156448919-Activity-Sharing-on-Discord-FAQ)
-
-The companion starts automatically on demand from Chrome. The ZIP includes the Windows runtime. Node.js and npm are only required to build from source. The optional `-LaunchChromeAtSignIn` installer switch opens Chrome at Windows sign-in. See the [Windows guide](docs/windows.md) for exact options, updates and checksum verification.
+Chrome starts the companion as needed. Setup uses the public TubePulse Discord application by default. See the [Windows guide](docs/windows.md) for upgrades, checksums and custom application IDs.
 
 The project also builds a ZIP containing just the Chrome extension. See the [Chrome Web Store guide](docs/chrome-web-store.md) for packaging and companion enrollment. [Privacy policy](docs/privacy.md) · [Terms](docs/terms.md)
 

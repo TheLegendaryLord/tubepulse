@@ -5,6 +5,7 @@ param(
     [string] $DiscordApplicationId,
     [ValidatePattern('\A[a-p]{32}\z')]
     [string] $ExtensionId,
+    [string] $NodePath,
     [switch] $LaunchChromeAtSignIn
 )
 
@@ -18,11 +19,41 @@ function Test-DiscordId([string] $Id) {
     return $Id -cmatch '\A[1-9][0-9]{16,19}\z' -and [UInt64]::TryParse($Id, [ref]$number)
 }
 
+function Resolve-LiteNode([string] $Path) {
+    if (-not $Path) {
+        $command = Get-Command node.exe -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($command) { $Path = $command.Source }
+    }
+    if ($Path -notmatch '\A[A-Z]:\\' -or
+        [IO.Path]::GetFileName($Path) -ine 'node.exe' -or -not [IO.File]::Exists($Path)) {
+        throw 'Windows Lite needs Node.js 22 or 24 LTS. Install Node.js and reopen setup, or pass -NodePath with the full path to node.exe.'
+    }
+    $resolved = [IO.Path]::GetFullPath($Path)
+    $previousOptions = $env:NODE_OPTIONS
+    $previousNodePath = $env:NODE_PATH
+    try {
+        $env:NODE_OPTIONS = $null
+        $env:NODE_PATH = $null
+        $versionText = & $resolved --version
+        if ($LASTEXITCODE -ne 0 -or $versionText -notmatch '\Av((?:22|24)\.\d+\.\d+)\z' -or
+            [version]$Matches[1] -lt [version]'22.13.0') {
+            throw 'Windows Lite requires Node.js 22.13 or later in the 22 LTS line, or Node.js 24 LTS.'
+        }
+    }
+    finally {
+        $env:NODE_OPTIONS = $previousOptions
+        $env:NODE_PATH = $previousNodePath
+    }
+    return $resolved
+}
+
 Invoke-WithSetupLock {
     if (-not [IO.File]::Exists((Join-Path $payload 'TubePulse.exe')) -or
         -not [IO.File]::Exists((Join-Path $payload 'extension\manifest.json'))) {
         throw 'Extract the entire TubePulse Windows ZIP before running Install.ps1.'
     }
+    $lite = [IO.File]::Exists((Join-Path $payload 'tubepulse.cjs'))
+    $runtimePathFile = 'node-path.txt'
     $previousInstall = Test-Path -LiteralPath $installDir
     if ($previousInstall) {
         Assert-ManagedDirectory $installDir
@@ -36,9 +67,14 @@ Invoke-WithSetupLock {
                 $ExtensionId = $previousConfig.extensionId
             }
         }
+        $previousRuntimePath = Join-Path $installDir $runtimePathFile
+        if ($lite -and -not $NodePath -and [IO.File]::Exists($previousRuntimePath)) {
+            $savedNode = [IO.File]::ReadAllText($previousRuntimePath)
+            if ([IO.File]::Exists($savedNode)) { $NodePath = $savedNode }
+        }
     }
     if (-not $DiscordApplicationId) {
-        $DiscordApplicationId = (Read-Host 'Discord Application ID from Developer Portal > General Information').Trim()
+        $DiscordApplicationId = '1569423752796708894'
     }
     if (-not (Test-DiscordId $DiscordApplicationId)) {
         throw 'Enter the numeric Application ID from your Discord application.'
@@ -46,6 +82,7 @@ Invoke-WithSetupLock {
     if ($ExtensionId -and $ExtensionId -cnotmatch '\A[a-p]{32}\z') {
         throw 'Enter the 32-letter lowercase TubePulse ID shown in chrome://extensions.'
     }
+    if ($lite) { $NodePath = Resolve-LiteNode $NodePath }
     $startupCommand = if ($LaunchChromeAtSignIn) { Get-ChromeStartupCommand }
 
     $suffix = [Guid]::NewGuid().ToString('N')
@@ -59,15 +96,16 @@ Invoke-WithSetupLock {
         foreach ($item in (Get-ChildItem -LiteralPath $payload -Force)) {
             Copy-Item -LiteralPath $item.FullName -Destination $stagingDir -Recurse -Force
         }
+        if ($lite) { [IO.File]::WriteAllText((Join-Path $stagingDir $runtimePathFile), $NodePath, $utf8) }
         foreach ($file in @('Uninstall.ps1', 'Setup.Common.ps1')) {
             Copy-Item -LiteralPath (Join-Path $PSScriptRoot $file) -Destination $stagingDir
         }
         if ($previousInstall) {
             Assert-TubePulseStopped
-            [IO.Directory]::Move($installDir, $backupDir)
+            Move-ManagedDirectory $installDir $backupDir
             $backedUp = $true
         }
-        [IO.Directory]::Move($stagingDir, $installDir)
+        Move-ManagedDirectory $stagingDir $installDir
         $promoted = $true
 
         if (-not $ExtensionId) {
@@ -95,7 +133,7 @@ Invoke-WithSetupLock {
     }
     catch {
         if ($promoted) { Remove-ManagedDirectory $installDir }
-        if ($backedUp) { [IO.Directory]::Move($backupDir, $installDir) }
+        if ($backedUp) { Move-ManagedDirectory $backupDir $installDir }
         throw
     }
     finally {

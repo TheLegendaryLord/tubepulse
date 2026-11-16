@@ -1,6 +1,6 @@
 {
   "name": "tubepulse",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "test": "vitest run",
     "build": "npm run build --workspaces --if-present",
     "package:windows": "npm run build && powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/Package-Windows.ps1",
+    "package:windows:lite": "npm run build && powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/Package-Windows.ps1 -Lite",
     "package:chrome": "npm run build --workspace @tubepulse/extension && powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/Package-Chrome.ps1"
   },
   "overrides": {

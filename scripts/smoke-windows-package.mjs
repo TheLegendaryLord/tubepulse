@@ -1,15 +1,19 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = fileURLToPath(new URL('../', import.meta.url));
 const { version } = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8'));
+const archive = process.argv[2];
+const distribution = archive === '--lite' ? 'windows-lite' : 'windows-x64';
 const zip = resolve(
-  process.argv[2] ?? join(repoRoot, 'artifacts', `TubePulse-${version}-windows-x64.zip`),
+  !archive || archive === '--lite'
+    ? join(repoRoot, 'artifacts', `TubePulse-${version}-${distribution}.zip`)
+    : archive,
 );
 const hash = createHash('sha256').update(readFileSync(zip)).digest('hex');
 assert.equal(readFileSync(`${zip}.sha256`, 'utf8').trim(), `${hash}  ${basename(zip)}`);
@@ -39,6 +43,10 @@ try {
   );
   assert.equal(manifest.manifest_version, 3);
   assert.equal(manifest.version, version);
+  assert.ok(existsSync(join(unpacked, 'Install.cmd')));
+  const payload = join(unpacked, 'payload');
+  const lite = existsSync(join(payload, 'tubepulse.cjs'));
+  if (lite) writeFileSync(join(payload, 'node-path.txt'), process.execPath);
 
   const extensionId = 'a'.repeat(32);
   const appData = join(sandbox, 'Local AppData');
@@ -53,7 +61,7 @@ try {
   const message = Buffer.from(JSON.stringify({ v: 1, type: 'activity', activity: null }));
   const length = Buffer.alloc(4);
   length.writeUInt32LE(message.length);
-  const executable = join(unpacked, 'payload', 'TubePulse.exe');
+  const executable = join(payload, 'TubePulse.exe');
   const options = {
     input: Buffer.concat([length, message]),
     env: { ...process.env, LOCALAPPDATA: appData, NODE_OPTIONS: '--require=unexpected-module' },

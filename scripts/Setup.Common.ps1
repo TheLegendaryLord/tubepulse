@@ -60,6 +60,21 @@ function Remove-ManagedDirectory([string] $Path) {
     [IO.Directory]::Delete([IO.Path]::GetFullPath($Path), $true)
 }
 
+function Move-ManagedDirectory([string] $Source, [string] $Destination) {
+    Assert-ManagedDirectory $Source
+    # A scanner can briefly hold a handle to a newly staged executable.
+    for ($attempt = 0; $attempt -lt 4; $attempt++) {
+        try {
+            [IO.Directory]::Move($Source, $Destination)
+            return
+        }
+        catch [IO.IOException], [UnauthorizedAccessException] {
+            if ($attempt -eq 3) { throw }
+            Start-Sleep -Milliseconds 200
+        }
+    }
+}
+
 function Get-ChromeStartupCommand {
     $candidates = foreach ($base in @($env:LOCALAPPDATA, $env:ProgramFiles, ${env:ProgramFiles(x86)})) {
         if ($base) { Join-Path $base 'Google\Chrome\Application\chrome.exe' }
