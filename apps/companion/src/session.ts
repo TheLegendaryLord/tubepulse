@@ -3,7 +3,7 @@ import { createConnection, type Socket } from 'node:net';
 
 import { PROTOCOL_VERSION, type NativeStatus, type PublicActivity } from '@tubepulse/shared';
 
-import { hidesChannelWithPausedLabel, toDiscordActivity, type DiscordActivity } from './activity.js';
+import { hidesChannelWithPlaybackLabel, toDiscordActivity, type DiscordActivity } from './activity.js';
 import { jsonPacket, packet, PacketReader, parseJson } from './packet.js';
 
 const opcode = { handshake: 0, frame: 1, close: 2, ping: 3, pong: 4 };
@@ -49,7 +49,7 @@ function removesFields(previous: DiscordActivity | null, desired: DiscordActivit
   return Boolean(
     (previous?.details && !desired.details) ||
     (previous?.state && !desired.state) ||
-    hidesChannelWithPausedLabel(previous?.state, desired.state) ||
+    hidesChannelWithPlaybackLabel(previous?.state, desired.state) ||
     (previous?.buttons && !desired.buttons) ||
     (previous?.assets && !desired.assets) ||
     (previous?.timestamps && !desired.timestamps),

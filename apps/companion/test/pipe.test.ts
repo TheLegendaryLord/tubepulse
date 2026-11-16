@@ -65,7 +65,7 @@ it('publishes framed Chrome activity over a real local pipe and clears it on bro
     );
     expect(await handshake).toEqual([{ v: 1, client_id: applicationId }]);
     expect(await publication).toEqual([
-      { pid: process.pid, activity: { type: 3, details: 'Pipe test' } },
+      { pid: process.pid, activity: { type: 3, details: 'Pipe test', status_display_type: 2 } },
     ]);
     expect(await confirmation).toEqual([{ v: 1, type: 'status', discord: 'ready', published: true }]);
 

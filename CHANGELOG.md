@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 preview
+
+- Give Discord activities media-specific links, artwork labels and a live playback label.
+- Use the shared title in Discord’s compact status and make shared titles and thumbnails clickable when links are enabled.
+- Apply more restrictive sharing choices promptly, including when a playback label replaces a channel name.
+
 ## 0.1.2 preview
 
 - Use the new TubePulse monogram in the Chrome toolbar, popup and project artwork.

@@ -81,13 +81,16 @@ describe('native messaging', () => {
 
 describe('Discord activity payloads', () => {
   const timestamps = { start: 1_700_000_000_500, end: 1_700_000_060_500 };
+  const videoId = 'dQw4w9WgXcQ';
+  const thumbnail = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
   it('uses Watching and canonical thumbnails and links without playlist or tracking parameters', () => {
+    const url = `https://www.youtube.com/shorts/${videoId}`;
     expect(
       toDiscordActivity({
         kind: 'short',
         state: 'playing',
-        videoId: 'dQw4w9WgXcQ',
+        videoId,
         title: 'Video title',
         channel: 'Channel name',
         link: true,
@@ -97,10 +100,60 @@ describe('Discord activity payloads', () => {
     ).toEqual({
       type: 3,
       details: 'Video title',
+      details_url: url,
+      status_display_type: 2,
       state: 'Channel name',
       timestamps: { start: 1_700_000_000, end: 1_700_000_061 },
-      buttons: [{ label: 'Watch on YouTube', url: 'https://www.youtube.com/shorts/dQw4w9WgXcQ' }],
-      assets: { large_image: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg' },
+      buttons: [{ label: 'Watch on YouTube Shorts', url }],
+      assets: {
+        large_image: thumbnail,
+        large_text: 'YouTube Shorts thumbnail',
+        large_url: url,
+      },
+    });
+  });
+
+  it('labels a live stream and preserves its count-up timer', () => {
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    expect(
+      toDiscordActivity({
+        kind: 'live',
+        state: 'playing',
+        channel: 'Video creator',
+        videoId,
+        link: true,
+        timestamps: { start: timestamps.start },
+      }),
+    ).toEqual({
+      type: 3,
+      state: 'Live · Video creator',
+      timestamps: { start: 1_700_000_000 },
+      buttons: [{ label: 'Watch live on YouTube', url }],
+    });
+  });
+
+  it('links to music with a dedicated label and does not leak a hidden title or thumbnail', () => {
+    const url = `https://music.youtube.com/watch?v=${videoId}`;
+    expect(toDiscordActivity({ kind: 'music', state: 'playing', videoId, link: true })).toEqual({
+      type: 2,
+      buttons: [{ label: 'Listen on YouTube Music', url }],
+    });
+  });
+
+  it('leaves thumbnail and title non-clickable when the video link is hidden', () => {
+    expect(
+      toDiscordActivity({
+        kind: 'video',
+        state: 'playing',
+        title: 'Video title',
+        videoId,
+        thumbnail: true,
+      }),
+    ).toEqual({
+      type: 3,
+      details: 'Video title',
+      status_display_type: 2,
+      assets: { large_image: thumbnail, large_text: 'YouTube video thumbnail' },
     });
   });
 

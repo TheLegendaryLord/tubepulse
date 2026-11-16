@@ -251,4 +251,38 @@ describe('Discord IPC lifecycle', () => {
       expect(commands(socket).at(-1)?.args.activity).toEqual({ type: 3, state: 'Paused' });
     },
   );
+
+  it('removes click-through links immediately while keeping the chosen title and thumbnail', () => {
+    const { session, sockets } = harness();
+    const socket = sockets[0]!;
+    connect(socket);
+    const shared = { ...video, videoId: 'dQw4w9WgXcQ', thumbnail: true };
+    session.setActivity({ ...shared, link: true });
+    acknowledge(socket);
+
+    session.setActivity(shared);
+    expect(commands(socket)).toHaveLength(2);
+    expect(commands(socket).at(-1)?.args.activity).toEqual({
+      type: 3,
+      details: video.title,
+      status_display_type: 2,
+      timestamps: { start: 1_700_000_000, end: 1_700_000_090 },
+      assets: {
+        large_image: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+        large_text: 'YouTube video thumbnail',
+      },
+    });
+  });
+
+  it('removes a hidden channel from live presence without waiting for the throttle', () => {
+    const { session, sockets } = harness();
+    const socket = sockets[0]!;
+    connect(socket);
+    session.setActivity({ kind: 'live', state: 'playing', channel: 'Live creator' });
+    acknowledge(socket);
+
+    session.setActivity({ kind: 'live', state: 'playing' });
+    expect(commands(socket)).toHaveLength(2);
+    expect(commands(socket).at(-1)?.args.activity).toEqual({ type: 3, state: 'Live' });
+  });
 });

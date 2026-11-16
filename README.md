@@ -6,11 +6,11 @@ TubePulse shows the YouTube video you are watching as a Rich Presence activity i
 
 You need Windows 10 or 11 (x64), an up-to-date Google Chrome, and the signed-in Discord Desktop app.
 
-1. [Download TubePulse for Windows x64](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.2/TubePulse-0.1.2-windows-x64.zip), extract the ZIP and double-click **Install.cmd**.
+1. [Download TubePulse for Windows x64](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.3/TubePulse-0.1.3-windows-x64.zip), extract the ZIP and double-click **Install.cmd**.
 2. In `chrome://extensions`, enable **Developer mode** and click **Load unpacked**. Choose the extension folder shown by setup and paste the ID from the TubePulse card back into setup.
 3. After setup finishes, reload the extension on `chrome://extensions`. Open the TubePulse popup, choose what you want to share and turn TubePulse on. In Discord Desktop, enable activity sharing and play a YouTube video. [Discord activity sharing settings](https://support.discord.com/hc/en-us/articles/7931156448919-Activity-Sharing-on-Discord-FAQ)
 
-The standard ZIP includes the runtime. If you already have Node.js 22.13+ or 24 LTS, download the [smaller Windows Lite ZIP](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.2/TubePulse-0.1.2-windows-lite.zip) and follow the same steps.
+The standard ZIP includes the runtime. If you already have Node.js 22.13+ or 24 LTS, download the [smaller Windows Lite ZIP](https://github.com/TheLegendaryLord/tubepulse/releases/download/v0.1.3/TubePulse-0.1.3-windows-lite.zip) and follow the same steps.
 
 Chrome starts the companion as needed. Setup uses the public TubePulse Discord application by default. See the [Windows guide](docs/windows.md) for upgrades, checksums and custom application IDs.
 
@@ -18,8 +18,8 @@ The project also builds a ZIP containing just the Chrome extension. See the [Chr
 
 ## What Discord can show
 
-- **Watching** for videos and Shorts, and **Listening** for YouTube Music when enabled.
-- Video title, channel, a playback clock, a **Watch on YouTube** button and a thumbnail from YouTube’s image CDN. Discord controls the layout and rendering. The owner of an activity may not be able to click its buttons.
+- **Watching** for videos and Shorts, **Listening** for YouTube Music, and a **Live** label for live streams.
+- Video title, channel, a playback clock and a thumbnail from YouTube’s image CDN. Enable **Video link** to add a media-specific button and make the shared title and thumbnail clickable. Discord controls which surfaces render these links. Check how they appear from another account.
 - Optional paused presence, without a running clock, up to the pause timeout set in the popup. Ended playback and closing the last eligible tab clear the activity.
 - Playing tabs take priority over paused tabs. When multiple eligible tabs play, TubePulse prefers the focused player, then the most recently started player.
 
