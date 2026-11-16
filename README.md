@@ -55,3 +55,8 @@ npm.cmd run package:windows
 ```
 
 The build creates `apps/extension/dist` and `apps/companion/dist`. Packaging builds both and writes the Windows ZIP and its checksum to `artifacts/`. A successful [CI run](https://github.com/TheLegendaryLord/tubepulse/actions/workflows/ci.yml) also provides a build artifact. See the [architecture](docs/architecture.md), [validation checklist](docs/validation.md) and [contributor guide](CONTRIBUTING.md).
+
+## Contributors
+
+- [TheLegendaryLord](https://github.com/TheLegendaryLord) — project direction, design feedback, and real-world testing.
+- [OpenAI Codex](https://github.com/codex) — AI-assisted implementation, Discord integration, branding, and automated testing.
